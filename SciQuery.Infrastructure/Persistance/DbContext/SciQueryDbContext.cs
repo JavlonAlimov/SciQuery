@@ -10,7 +10,7 @@ public class SciQueryDbContext(DbContextOptions<SciQueryDbContext> options,
 {
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        base.OnConfiguring(optionsBuilder);
         optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+        base.OnConfiguring(optionsBuilder);
     }
 }

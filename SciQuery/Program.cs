@@ -16,14 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
-//AddDbcontext
-builder.Services.AddDbContext<SciQueryDbContext>();
-
 //Identity Usermanager and rolemanager
-builder.Services.AddIdentityCore<User>()
-    .AddRoles<IdentityRole>()
-    .AddDefaultTokenProviders();
-
+builder.Services.AddDbContext<SciQueryDbContext>();
+builder.Services.AddIdentityCore<IdentityUser>()
+ .AddEntityFrameworkStores<SciQueryDbContext>()
+ .AddDefaultTokenProviders();
 //AddAuthentication
 
 builder.Services.AddAuthentication(options =>
@@ -74,7 +71,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+//Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -107,11 +104,11 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RequireAdminstratorRole", policy => policy.RequireRole(AppRoles.Administrator));
-    options.AddPolicy("RequireUserRole", policy => policy.RequireRole(AppRoles.User));
-    options.AddPolicy("RequireMasterRole", policy => policy.RequireRole(AppRoles.Master));
+options.AddPolicy("RequireUserRole", policy => policy.RequireRole(AppRoles.User));
+options.AddPolicy("RequireMasterRole", policy => policy.RequireRole(AppRoles.Master));
 
-    // Master is user .
-    options.AddPolicy("RequireUserAndMasterRole", policy => policy.RequireRole(AppRoles.Administrator,AppRoles.User));
+// Master is user .
+options.AddPolicy("RequireUserAndMasterRole", policy => policy.RequireRole(AppRoles.Administrator, AppRoles.User));
 });
 
 
