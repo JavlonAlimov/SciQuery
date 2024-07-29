@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SciQuery.Service.User.AddOrUpdateUserModel;
+namespace SciQuery.Domain.UserModels;
 
 public class AddOrUpdateUserModel
 {
