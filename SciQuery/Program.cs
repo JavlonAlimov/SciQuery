@@ -18,7 +18,9 @@ builder.Services.AddControllers();
 
 //Identity Usermanager and rolemanager
 builder.Services.AddDbContext<SciQueryDbContext>();
+
 builder.Services.AddIdentityCore<IdentityUser>()
+ .AddRoles<IdentityRole>()  
  .AddEntityFrameworkStores<SciQueryDbContext>()
  .AddDefaultTokenProviders();
 //AddAuthentication
