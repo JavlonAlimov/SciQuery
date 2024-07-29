@@ -1,6 +1,6 @@
 ﻿namespace SciQuery.Domain.Votes;
 public enum VoteEnum
 {
-    like,
-    dislike
+    Like,
+    Dislike
 }
