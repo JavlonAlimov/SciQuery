@@ -2,12 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using SciQuery.Domain.User;
 using SciQuery.Domain.User.AppRoles;
 using SciQuery.Infrastructure.Persistance.DbContext;
-using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Runtime;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,11 +14,9 @@ builder.Services.AddControllers();
 
 //AddDbcontext
 builder.Services.AddDbContext<SciQueryDbContext>();
-
-//Identity Usermanager and rolemanager
-builder.Services.AddIdentityCore<User>()
-    .AddRoles<IdentityRole>()
-    .AddDefaultTokenProviders();
+builder.Services.AddIdentityCore<IdentityUser>()
+ .AddEntityFrameworkStores<SciQueryDbContext>()
+ .AddDefaultTokenProviders();
 
 //AddAuthentication
 
@@ -102,6 +96,8 @@ builder.Services.AddSwaggerGen(options =>
     });
 
 });
+
+builder.Services.AddDbContext<SciQueryDbContext>();
 //Policies for Role requirements 
 
 builder.Services.AddAuthorization(options =>
@@ -111,7 +107,7 @@ builder.Services.AddAuthorization(options =>
     options.AddPolicy("RequireMasterRole", policy => policy.RequireRole(AppRoles.Master));
 
     // Master is user .
-    options.AddPolicy("RequireUserAndMasterRole", policy => policy.RequireRole(AppRoles.Administrator,AppRoles.User));
+    options.AddPolicy("RequireUserAndMasterRole", policy => policy.RequireRole(AppRoles.Administrator, AppRoles.User));
 });
 
 
