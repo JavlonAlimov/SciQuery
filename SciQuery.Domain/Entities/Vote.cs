@@ -12,6 +12,6 @@ public class Vote
     public Question Question { get; set; }
     public int? AnswerId { get; set; }
     public Answer Answer { get; set; }
-    public VoteEnum EnumType { get; set; }
+    public VoteEnum VoteType { get; set; }
 
 }

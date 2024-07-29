@@ -11,7 +11,7 @@ public class Answer
     public string? Body { get; set; }
     public List<string?>? ImagePath { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.Now;
-    public DateTime? UpdatedDate { get; set; }
+    public DateTime? UpdatedDate { get; set; } = DateTime.Now;
 
     public virtual ICollection<Vote> Votes { get; set; }
     public virtual ICollection<Comment> Comments{ get; set; }
