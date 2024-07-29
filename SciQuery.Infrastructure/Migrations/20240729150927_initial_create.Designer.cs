@@ -12,8 +12,8 @@ using SciQuery.Infrastructure.Persistance.DbContext;
 namespace SciQuery.Infrastructure.Migrations
 {
     [DbContext(typeof(SciQueryDbContext))]
-    [Migration("20240729144931_AddEntities")]
-    partial class AddEntities
+    [Migration("20240729150927_initial_create")]
+    partial class initial_create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
