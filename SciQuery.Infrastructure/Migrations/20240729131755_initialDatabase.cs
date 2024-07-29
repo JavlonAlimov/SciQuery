@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SciQuery.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class createdataDase : Migration
+    public partial class initialDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -174,9 +174,9 @@ namespace SciQuery.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    QuestionId = table.Column<int>(type: "int", nullable: false),
-                    AnswerId = table.Column<int>(type: "int", nullable: false),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    QuestionId = table.Column<int>(type: "int", nullable: true),
+                    AnswerId = table.Column<int>(type: "int", nullable: true),
                     EnumType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -186,19 +186,18 @@ namespace SciQuery.Infrastructure.Migrations
                         name: "FK_Vote_Answer_AnswerId",
                         column: x => x.AnswerId,
                         principalTable: "Answer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Vote_AspNetUsers_UserId1",
                         column: x => x.UserId1,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Vote_Question_QuestionId",
                         column: x => x.QuestionId,
                         principalTable: "Question",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(

@@ -346,19 +346,20 @@ namespace SciQuery.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("AnswerId")
+                    b.Property<int?>("AnswerId")
                         .HasColumnType("int");
 
                     b.Property<int>("EnumType")
                         .HasColumnType("int");
 
-                    b.Property<int>("QuestionId")
+                    b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<string>("UserId1")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -580,19 +581,17 @@ namespace SciQuery.Infrastructure.Migrations
                 {
                     b.HasOne("SciQuery.Domain.Entities.Answer", "Answer")
                         .WithMany("Votes")
-                        .HasForeignKey("AnswerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AnswerId");
 
                     b.HasOne("SciQuery.Domain.Entities.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .WithMany("Votes")
+                        .HasForeignKey("QuestionId");
 
                     b.HasOne("SciQuery.Domain.User.User", "User")
                         .WithMany("Votes")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId1")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Answer");
 
@@ -615,6 +614,8 @@ namespace SciQuery.Infrastructure.Migrations
                     b.Navigation("Comments");
 
                     b.Navigation("QuestionTags");
+
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.Tag", b =>

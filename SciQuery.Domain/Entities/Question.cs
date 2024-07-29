@@ -15,6 +15,7 @@ public class Question
     public virtual ICollection<Answer> Answers { get; set; }
     public virtual ICollection<Comment> Comments { get; set; }
     public virtual ICollection<QuestionTag> QuestionTags { get; set; }
+    public virtual ICollection<Vote> Votes { get; set; }
 
 
 }
