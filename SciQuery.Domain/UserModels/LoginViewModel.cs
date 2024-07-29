@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SciQuery.Service.User.LoginViewModel;
+namespace SciQuery.Domain.UserModels;
 
 public class LoginViewModel
 {

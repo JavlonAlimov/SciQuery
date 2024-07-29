@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SciQuery.Domain\SciQuery.Domain.csproj" />
+    <ProjectReference Include="..\SciQuery.Infrastructure\SciQuery.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
