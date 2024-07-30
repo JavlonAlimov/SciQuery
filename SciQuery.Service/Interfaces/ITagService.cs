@@ -1,7 +1,4 @@
 ﻿using SciQuery.Domain.Entities;
-using SciQuery.Service.DTOs.Answer;
-using SciQuery.Service.DTOs.Question;
-using SciQuery.Service.Pagination.PaginatedList;
 
 namespace SciQuery.Service.Interfaces;
 

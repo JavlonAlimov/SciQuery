@@ -1,10 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SciQuery.Domain.Entities;
 using SciQuery.Infrastructure.Persistance.DbContext;
+using SciQuery.Service.Interfaces;
 
 namespace SciQuery.Service.Services;
 
-public class TagService(SciQueryDbContext context)
+public class TagService(SciQueryDbContext context) : ITagService
 {
     private readonly SciQueryDbContext _context = context;
 

@@ -5,6 +5,8 @@ using Microsoft.OpenApi.Models;
 using SciQuery.Domain.UserModels;
 using SciQuery.Domain.UserModels.AppRoles;
 using SciQuery.Infrastructure.Persistance.DbContext;
+using SciQuery.Service.Interfaces;
+using SciQuery.Service.Services;
 using System.Text;
 
 internal class Program
@@ -16,6 +18,13 @@ internal class Program
         // Add services to the container.
 
         builder.Services.AddControllers();
+
+        //Add Services
+        builder.Services.AddScoped<ITagService, TagService>();
+        builder.Services.AddScoped<IQuestionService, QuestionService>();
+        builder.Services.AddScoped<IAnswerService, AnswerService>();
+        builder.Services.AddScoped<IVoteService, VoteService>();
+        builder.Services.AddScoped<ICommentService, CommentService>();
 
         //Identity Usermanager and rolemanager
         builder.Services.AddDbContext<SciQueryDbContext>();
