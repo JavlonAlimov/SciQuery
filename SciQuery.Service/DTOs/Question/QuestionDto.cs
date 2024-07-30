@@ -15,9 +15,9 @@ public class QuestionDto
     public DateTime UpdatedDate { get; set; }
     public int UserId { get; set; }
     public UserDto User { get; set; }
+    public int Votes { get; set; }
 
     public ICollection<AnswerDto> Answers { get; set; }
     public ICollection<CommentDto> Comments { get; set; }
-    public ICollection<VoteDto> Votes { get; set; }
     public ICollection<TagDto> Tags {  get; set; }
 }
