@@ -35,7 +35,7 @@ namespace SciQuery.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateQuestion([FromBody] QuestionDto questionDto)
+        public async Task<IActionResult> CreateQuestion([FromBody] QuestionForCreateDto questionDto)
         {
             if (!ModelState.IsValid)
             {
@@ -43,35 +43,27 @@ namespace SciQuery.Controllers
             }
 
             var createdQuestion = await _questionService.CreateAsync(questionDto);
-            return CreatedAtAction(nameof(GetQuestionById), new { id = createdQuestion.QuestionId }, createdQuestion);
+            return CreatedAtAction(nameof(GetQuestionById), new { id = createdQuestion.Id}, createdQuestion);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateQuestion(int id, [FromBody] QuestionDto questionDto)
+        public async Task<IActionResult> UpdateQuestion(int id, [FromBody] QuestionForUpdateDto questionDto)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var updatedQuestion = await _questionService.UpdateAsync(id, questionDto);
-            if (updatedQuestion == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(updatedQuestion);
+            await _questionService.UpdateAsync(id, questionDto);
+            
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteQuestion(int id)
         {
-            var result = await _questionService.DeleteAsync(id);
-            if (!result)
-            {
-                return NotFound();
-            }
-
+            await _questionService.DeleteAsync(id);
+            
             return NoContent();
         }
     }
