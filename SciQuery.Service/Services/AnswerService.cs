@@ -8,7 +8,7 @@ using SciQuery.Service.Interfaces;
 using SciQuery.Service.Mappings.Extensions;
 using SciQuery.Service.Pagination.PaginatedList;
 
-namespace SciQuery.Application.Services;
+namespace SciQuery.Service.Services;
 
 public class AnswerService(SciQueryDbContext context, IMapper mapper) : IAnswerService
 {
