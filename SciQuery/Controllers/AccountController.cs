@@ -38,7 +38,7 @@ public class AccountController(
             return BadRequest(ModelState);
         }
 
-        var token = _accountService.LoginAsync(login);
+        var token = await _accountService.LoginAsync(login);
         return Ok(token);
     }
 }

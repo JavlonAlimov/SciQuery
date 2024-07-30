@@ -1,20 +1,19 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SciQuery.Domain.UserModels;
 using SciQuery.Service.DTOs.Question;
 using SciQuery.Service.Interfaces;
+using System.Security.Claims;
 
 namespace SciQuery.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionsController : ControllerBase
+    public class QuestionsController(IQuestionService questionService, UserManager<User> userManager) : ControllerBase
     {
-        private readonly IQuestionService _questionService;
-
-        public QuestionsController(IQuestionService questionService)
-        {
-            _questionService = questionService;
-        }
+        private readonly IQuestionService _questionService = questionService;
+        private readonly UserManager<User> _userManager = userManager;
 
         [HttpGet]
         public async Task<IActionResult> GetAllQuestions()
@@ -26,6 +25,7 @@ namespace SciQuery.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetQuestionById(int id)
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var question = await _questionService.GetByIdAsync(id);
             if (question == null)
             {
@@ -41,7 +41,7 @@ namespace SciQuery.Controllers
             {
                 return BadRequest(ModelState);
             }
-
+            
             var createdQuestion = await _questionService.CreateAsync(questionDto);
             return CreatedAtAction(nameof(GetQuestionById), new { id = createdQuestion.Id}, createdQuestion);
         }

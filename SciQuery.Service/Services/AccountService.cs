@@ -85,7 +85,8 @@ public class AccountService(UserManager<User> userManager,IConfiguration configu
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name,userName)
+            new(ClaimTypes.Name,userName),
+            new(ClaimTypes.NameIdentifier,user.Id),
         };
         claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 

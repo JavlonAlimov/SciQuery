@@ -10,7 +10,7 @@ namespace SciQuery.Service.DTOs.Question
     {
         public string Title { get; set; }
         public string Body { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
     }
 
 }
