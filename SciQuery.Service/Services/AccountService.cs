@@ -62,7 +62,7 @@ public class AccountService(UserManager<User> userManager,IConfiguration configu
         if (!result)
         {
             throw new AuthenticationException($"Incorrect Password!");
-        }
+        }   
         
         user.LastLogindate = DateTime.Now;
         await _userManager.UpdateAsync(user);

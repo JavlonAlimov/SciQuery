@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SciQuery.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initial_create : Migration
+    public partial class updateanswer_table : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -174,13 +174,12 @@ namespace SciQuery.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Question",
+                name: "Questions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -189,12 +188,13 @@ namespace SciQuery.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Question", x => x.Id);
+                    table.PrimaryKey("PK_Questions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Question_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Questions_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -203,8 +203,7 @@ namespace SciQuery.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ChangeAmount = table.Column<int>(type: "int", nullable: false),
                     Reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -213,10 +212,11 @@ namespace SciQuery.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_ReputationChange", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReputationChange_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_ReputationChange_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -226,8 +226,7 @@ namespace SciQuery.Infrastructure.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     QuestionId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -237,20 +236,21 @@ namespace SciQuery.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Answer", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Answer_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Answer_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Answer_Question_QuestionId",
+                        name: "FK_Answer_Questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Question",
+                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuestionTag",
+                name: "QuestionTags",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -260,15 +260,15 @@ namespace SciQuery.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionTag", x => x.Id);
+                    table.PrimaryKey("PK_QuestionTags", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuestionTag_Question_QuestionId",
+                        name: "FK_QuestionTags_Questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Question",
+                        principalTable: "Questions",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuestionTag_Tag_TagId",
+                        name: "FK_QuestionTags_Tag_TagId",
                         column: x => x.TagId,
                         principalTable: "Tag",
                         principalColumn: "Id",
@@ -281,8 +281,7 @@ namespace SciQuery.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: true),
                     AnswerId = table.Column<int>(type: "int", nullable: true),
                     Body = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -297,14 +296,15 @@ namespace SciQuery.Infrastructure.Migrations
                         principalTable: "Answer",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Comment_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Comment_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comment_Question_QuestionId",
+                        name: "FK_Comment_Questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Question",
+                        principalTable: "Questions",
                         principalColumn: "Id");
                 });
 
@@ -314,11 +314,10 @@ namespace SciQuery.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     QuestionId = table.Column<int>(type: "int", nullable: true),
                     AnswerId = table.Column<int>(type: "int", nullable: true),
-                    EnumType = table.Column<int>(type: "int", nullable: false)
+                    VoteType = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -329,15 +328,15 @@ namespace SciQuery.Infrastructure.Migrations
                         principalTable: "Answer",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Vote_AspNetUsers_UserId1",
-                        column: x => x.UserId1,
+                        name: "FK_Vote_AspNetUsers_UserId",
+                        column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vote_Question_QuestionId",
+                        name: "FK_Vote_Questions_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Question",
+                        principalTable: "Questions",
                         principalColumn: "Id");
                 });
 
@@ -347,9 +346,9 @@ namespace SciQuery.Infrastructure.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Answer_UserId1",
+                name: "IX_Answer_UserId",
                 table: "Answer",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -401,29 +400,29 @@ namespace SciQuery.Infrastructure.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_UserId1",
+                name: "IX_Comment_UserId",
                 table: "Comment",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Question_UserId1",
-                table: "Question",
-                column: "UserId1");
+                name: "IX_Questions_UserId",
+                table: "Questions",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionTag_QuestionId",
-                table: "QuestionTag",
+                name: "IX_QuestionTags_QuestionId",
+                table: "QuestionTags",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionTag_TagId",
-                table: "QuestionTag",
+                name: "IX_QuestionTags_TagId",
+                table: "QuestionTags",
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReputationChange_UserId1",
+                name: "IX_ReputationChange_UserId",
                 table: "ReputationChange",
-                column: "UserId1");
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vote_AnswerId",
@@ -436,9 +435,9 @@ namespace SciQuery.Infrastructure.Migrations
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vote_UserId1",
+                name: "IX_Vote_UserId",
                 table: "Vote",
-                column: "UserId1");
+                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -463,7 +462,7 @@ namespace SciQuery.Infrastructure.Migrations
                 name: "Comment");
 
             migrationBuilder.DropTable(
-                name: "QuestionTag");
+                name: "QuestionTags");
 
             migrationBuilder.DropTable(
                 name: "ReputationChange");
@@ -481,7 +480,7 @@ namespace SciQuery.Infrastructure.Migrations
                 name: "Answer");
 
             migrationBuilder.DropTable(
-                name: "Question");
+                name: "Questions");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
