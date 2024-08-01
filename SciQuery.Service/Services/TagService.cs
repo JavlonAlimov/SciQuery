@@ -1,17 +1,28 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 using SciQuery.Domain.Entities;
 using SciQuery.Infrastructure.Persistance.DbContext;
+using SciQuery.Service.DTOs.Tag;
 using SciQuery.Service.Interfaces;
+using SciQuery.Service.Mappings.Extensions;
+using SciQuery.Service.Pagination.PaginatedList;
 
 namespace SciQuery.Service.Services;
 
-public class TagService(SciQueryDbContext context) : ITagService
+public class TagService(SciQueryDbContext context , IMapper mapper) : ITagService
 {
-    private readonly SciQueryDbContext _context = context;
 
-    public async Task<IEnumerable<Tag>> GetAllTagsAsync()
+    private readonly SciQueryDbContext _context = context;
+    private readonly IMapper _mapper = mapper;
+
+    public async Task<PaginatedList<TagDto>> GetAllTagsAsync()
     {
-        return await _context.Tags.ToListAsync();
+        var tags = await _context.Tags
+            .Include(t => t.QuestionTags)
+            .AsNoTracking()
+            .ToPaginatedList<TagDto, Tag>(_mapper.ConfigurationProvider, 1, 15);
+        return tags;
     }
 
     public async Task<Tag> GetTagByIdAsync(int id)
@@ -19,11 +30,13 @@ public class TagService(SciQueryDbContext context) : ITagService
         return await _context.Tags.FindAsync(id);
     }
 
-    public async Task<Tag> CreateTagAsync(Tag tag)
+    public async Task<Tag> CreateTagAsync(TagForCreateDto tag)
     {
-        _context.Tags.Add(tag);
+        var entity = _mapper.Map<Tag>(tag); 
+
+        _context.Tags.Add(entity);
         await _context.SaveChangesAsync();
-        return tag;
+        return entity;
     }
 
     public async Task<Tag> UpdateTagAsync(int id, Tag tag)

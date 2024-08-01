@@ -7,5 +7,5 @@ public class UserDto
     public string Email { get; set; }
     public int Reputation { get; set; }
     public DateTime CreatedDate { get; set; }
-    public DateTime UpdatedDate { get; set; } = DateTime.Now;
+    public DateTime LastLogindate { get; set; } = DateTime.Now;
 }

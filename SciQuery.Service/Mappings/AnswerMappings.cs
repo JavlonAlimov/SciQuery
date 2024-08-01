@@ -14,13 +14,8 @@ internal class AnswerMappings : Profile
 {
     public AnswerMappings()
     {
-        CreateMap<Answer, AnswerDto>()
-            .ForMember(c => c.Votes, m => m.MapFrom(e => GetVotes(e)))
-            .ReverseMap();
+        CreateMap<Answer, AnswerDto>();
         CreateMap<AnswerForCreateDto, Answer>();
         CreateMap<AnswerForUpdateDto, Answer>();
     }
-    private int GetVotes(Answer answer) =>
-        answer.Votes.Count(x => x.VoteType == VoteEnum.Like) 
-        - answer.Votes.Count(x => x.VoteType == VoteEnum.Dislike);
 }

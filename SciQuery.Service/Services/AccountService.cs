@@ -32,6 +32,7 @@ public class AccountService(UserManager<User> userManager,IConfiguration configu
         {
             UserName = model.UserName,
             Email = model.Email,
+            CreatedDate = DateTime.Now,
             SecurityStamp = Guid.NewGuid().ToString(),
         };
 
@@ -62,8 +63,12 @@ public class AccountService(UserManager<User> userManager,IConfiguration configu
         {
             throw new AuthenticationException($"Incorrect Password!");
         }
-
+        
+        user.LastLogindate = DateTime.Now;
+        await _userManager.UpdateAsync(user);
+        
         var token = await GenerateToken(user, model.UserName);
+        
         return token ?? "";
 
     }
@@ -85,7 +90,8 @@ public class AccountService(UserManager<User> userManager,IConfiguration configu
 
         var claims = new List<Claim>
         {
-            new(ClaimTypes.Name,userName)
+            new(ClaimTypes.Name,userName),
+            new(ClaimTypes.NameIdentifier,user.Id),
         };
         claims.AddRange(userRoles.Select(role => new Claim(ClaimTypes.Role, role)));
 

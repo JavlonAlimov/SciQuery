@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SciQuery.Domain.Entities;
+using SciQuery.Service.DTOs.Tag;
 using SciQuery.Service.Interfaces;
 
 namespace SciQuery.Controllers
@@ -30,7 +31,7 @@ namespace SciQuery.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateTag([FromBody] Tag tag)
+        public async Task<IActionResult> CreateTag([FromBody] TagForCreateDto tag)
         {
             if (!ModelState.IsValid)
             {
