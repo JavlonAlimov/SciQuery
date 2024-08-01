@@ -9,7 +9,9 @@ namespace SciQuery.Service.Mappings
     {
         public QuestionMappings()
         {
-            CreateMap<Question, QuestionDto>();
+            CreateMap<Question, QuestionDto>()
+                .ForMember(dest => dest.Tags, opt => opt.MapFrom(src => src.QuestionTags.Select(qt => qt.Tag.Name).ToList()));
+
             CreateMap<QuestionForCreateDto, Question>();
             CreateMap<QuestionForUpdateDto, Question>();
         }

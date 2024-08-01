@@ -47,7 +47,7 @@ public class QuestionService(SciQueryDbContext dbContext,IMapper mapper) : IQues
         question.CreatedDate = DateTime.Now;
         question.UpdatedDate = DateTime.Now;
 
-        _context.Questions.Add(question);
+        var created = _context.Questions.Add(question).Entity;
         await _context.SaveChangesAsync();
 
         foreach (var tagName in questionCreateDto.Tags)
@@ -70,7 +70,7 @@ public class QuestionService(SciQueryDbContext dbContext,IMapper mapper) : IQues
             _context.QuestionTags.Add(questionTag);
         }
 
-        return _mapper.Map<QuestionDto>(question);
+        return _mapper.Map<QuestionDto>(created);
     }
 
     public async Task UpdateAsync(int id, QuestionForUpdateDto questionUpdateDto)

@@ -19,5 +19,5 @@ public class QuestionDto
     public ICollection<VoteDto> Votes { get; set; }
     public ICollection<AnswerDto> Answers { get; set; }
     public ICollection<CommentDto> Comments { get; set; }
-    public ICollection<QuestionTag> QuestionTags {  get; set; }
+    public ICollection<string> Tags {  get; set; }
 }
