@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SciQuery.Infrastructure.Persistance.DbContext;
 
@@ -11,9 +12,11 @@ using SciQuery.Infrastructure.Persistance.DbContext;
 namespace SciQuery.Infrastructure.Migrations
 {
     [DbContext(typeof(SciQueryDbContext))]
-    partial class SciQueryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240801110126_CHangedTAbleAsnwer")]
+    partial class CHangedTAbleAsnwer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,15 +181,9 @@ namespace SciQuery.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Answer", (string)null);
                 });
@@ -258,7 +255,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.QuestionTag", b =>
@@ -281,7 +278,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("QuestionTag", (string)null);
+                    b.ToTable("QuestionTags");
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.ReputationChange", b =>
@@ -498,15 +495,7 @@ namespace SciQuery.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SciQuery.Domain.UserModels.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Question");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.Comment", b =>

@@ -1,3 +1,4 @@
+using Bogus;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -5,6 +6,9 @@ using Microsoft.OpenApi.Models;
 using SciQuery.Domain.UserModels;
 using SciQuery.Domain.UserModels.AppRoles;
 using SciQuery.Infrastructure.Persistance.DbContext;
+using SciQuery.Service.Interfaces;
+using SciQuery.Service.Mappings;
+using SciQuery.Service.Services;
 using System.Text;
 
 internal class Program
@@ -17,6 +21,14 @@ internal class Program
 
         builder.Services.AddControllers();
 
+        //Add Services
+        builder.Services.AddScoped<IAccountService,AccountService>();
+        builder.Services.AddScoped<ITagService, TagService>();
+        builder.Services.AddScoped<IQuestionService, QuestionService>();
+        builder.Services.AddScoped<IAnswerService, AnswerService>();
+        builder.Services.AddScoped<IVoteService, VoteService>();
+        builder.Services.AddScoped<ICommentService, CommentService>();
+        builder.Services.AddAutoMapper(typeof(UserMappings).Assembly);
         //Identity Usermanager and rolemanager
         builder.Services.AddDbContext<SciQueryDbContext>();
 
@@ -126,6 +138,11 @@ internal class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<SciQueryDbContext>();
+
+            DatabaseSeeder.SeedData(context);
         }
 
         // Check if the roles exist, if not, create them
@@ -162,6 +179,6 @@ internal class Program
 
         app.MapControllers();
 
-        app.Run();
+            app.Run();
     }
 }

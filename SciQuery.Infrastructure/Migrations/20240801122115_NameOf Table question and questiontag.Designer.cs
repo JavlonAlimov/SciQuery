@@ -12,8 +12,8 @@ using SciQuery.Infrastructure.Persistance.DbContext;
 namespace SciQuery.Infrastructure.Migrations
 {
     [DbContext(typeof(SciQueryDbContext))]
-    [Migration("20240729144931_AddEntities")]
-    partial class AddEntities
+    [Migration("20240801122115_NameOf Table question and questiontag")]
+    partial class NameOfTablequestionandquestiontag
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -181,19 +181,17 @@ namespace SciQuery.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Answer");
+                    b.ToTable("Answer", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.Comment", b =>
@@ -217,10 +215,8 @@ namespace SciQuery.Infrastructure.Migrations
                     b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -229,9 +225,9 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Comment");
+                    b.ToTable("Comment", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.Question", b =>
@@ -257,17 +253,15 @@ namespace SciQuery.Infrastructure.Migrations
                     b.Property<DateTime?>("UpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Question");
+                    b.ToTable("Question", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.QuestionTag", b =>
@@ -290,7 +284,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("QuestionTag");
+                    b.ToTable("QuestionTag", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.ReputationChange", b =>
@@ -311,17 +305,15 @@ namespace SciQuery.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("ReputationChange");
+                    b.ToTable("ReputationChange", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.Tag", b =>
@@ -338,7 +330,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Tag");
+                    b.ToTable("Tag", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.Vote", b =>
@@ -352,18 +344,15 @@ namespace SciQuery.Infrastructure.Migrations
                     b.Property<int?>("AnswerId")
                         .HasColumnType("int");
 
-                    b.Property<int>("EnumType")
-                        .HasColumnType("int");
-
                     b.Property<int?>("QuestionId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("VoteType")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -371,9 +360,9 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("QuestionId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("Vote");
+                    b.ToTable("Vote", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.UserModels.User", b =>
@@ -514,7 +503,9 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasOne("SciQuery.Domain.UserModels.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Question");
 
@@ -533,7 +524,9 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasOne("SciQuery.Domain.UserModels.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Answer");
 
@@ -546,7 +539,9 @@ namespace SciQuery.Infrastructure.Migrations
                 {
                     b.HasOne("SciQuery.Domain.UserModels.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -574,7 +569,9 @@ namespace SciQuery.Infrastructure.Migrations
                 {
                     b.HasOne("SciQuery.Domain.UserModels.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
@@ -591,7 +588,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasOne("SciQuery.Domain.UserModels.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

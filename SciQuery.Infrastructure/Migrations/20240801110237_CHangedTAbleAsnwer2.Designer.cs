@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SciQuery.Infrastructure.Persistance.DbContext;
 
@@ -11,9 +12,11 @@ using SciQuery.Infrastructure.Persistance.DbContext;
 namespace SciQuery.Infrastructure.Migrations
 {
     [DbContext(typeof(SciQueryDbContext))]
-    partial class SciQueryDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240801110237_CHangedTAbleAsnwer2")]
+    partial class CHangedTAbleAsnwer2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -258,7 +261,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Questions");
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.QuestionTag", b =>
@@ -281,7 +284,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("QuestionTag", (string)null);
+                    b.ToTable("QuestionTags");
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.ReputationChange", b =>
