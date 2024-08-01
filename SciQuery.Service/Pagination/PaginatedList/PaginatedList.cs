@@ -1,6 +1,6 @@
 ﻿namespace SciQuery.Service.Pagination.PaginatedList;
 
-public class PaginatedList<T> : List<T>
+public class PaginatedList<T> 
 {
     public List<T> Data { get; init; }
     public int CurrentPage { get; init; }

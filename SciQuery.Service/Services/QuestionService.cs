@@ -21,7 +21,7 @@ public class QuestionService(SciQueryDbContext dbContext,IMapper mapper) : IQues
             .Include(q => q.User)
             .ToPaginatedList<QuestionDto, Question>(_mapper.ConfigurationProvider, 1, 15);
 
-        return _mapper.Map<PaginatedList<QuestionDto>>(questions);
+        return questions;
     }
     public async Task<QuestionDto> GetByIdAsync(int id)
     {
@@ -34,19 +34,41 @@ public class QuestionService(SciQueryDbContext dbContext,IMapper mapper) : IQues
             .AsNoTracking()
             .AsSplitQuery()
             .FirstOrDefaultAsync(q => q.Id == id);
-        
-        return question == null
-            ? throw new EntityNotFoundException($"Question with id : {id} is not found!")
-            : _mapper.Map<QuestionDto>(question);
+
+        var dto = _mapper.Map<QuestionDto>(question);
+
+        return dto
+            ?? throw new EntityNotFoundException($"Question with id : {id} is not found!");
     }
 
     public async Task<QuestionDto> CreateAsync(QuestionForCreateDto questionCreateDto)
     {
         var question = _mapper.Map<Question>(questionCreateDto);
-        question.CreatedDate = DateTime.UtcNow;
+        question.CreatedDate = DateTime.Now;
+        question.UpdatedDate = DateTime.Now;
 
         _context.Questions.Add(question);
         await _context.SaveChangesAsync();
+
+        foreach (var tagName in questionCreateDto.Tags)
+        {
+            var tag = await _context.Tags.SingleOrDefaultAsync(t => t.Name == tagName);
+            
+            if (tag == null)
+            {
+                tag = new Tag { Name = tagName };
+                _context.Tags.Add(tag);
+                await _context.SaveChangesAsync();
+            }
+
+            var questionTag = new QuestionTag
+            {
+                QuestionId = question.Id,
+                TagId = tag.Id
+            };
+
+            _context.QuestionTags.Add(questionTag);
+        }
 
         return _mapper.Map<QuestionDto>(question);
     }
@@ -55,6 +77,8 @@ public class QuestionService(SciQueryDbContext dbContext,IMapper mapper) : IQues
     {
         var question = await _context.Questions.FindAsync(id) 
             ?? throw new EntityNotFoundException($"Question with id : {id} is not found!");
+        
+        question.UpdatedDate = DateTime.Now;
 
         _mapper.Map(questionUpdateDto, question);
         
