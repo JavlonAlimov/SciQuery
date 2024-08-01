@@ -18,7 +18,7 @@ public class AnswerService(SciQueryDbContext context, IMapper mapper) : IAnswerS
     public async Task<AnswerDto> GetByIdAsync(int id)
     {
         var answer = await _context.Answers
-            .Include(a => a.User)
+            //.Include(a => a.User)
             .Include(a => a.Question)
             .Include(a => a.Votes)
             .AsNoTracking()
@@ -32,7 +32,7 @@ public class AnswerService(SciQueryDbContext context, IMapper mapper) : IAnswerS
     public async Task<PaginatedList<AnswerDto>> GetAllAnswersByQuestionIdAsync(int questionId)
     {
         var answers = await _context.Answers
-            .Include(a => a.User)
+            //.Include(a => a.User)
             .Include(a => a.Question)
             .Include(a => a.Votes)
             .Where(a => a.QuestionId == questionId)
