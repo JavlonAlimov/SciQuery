@@ -258,7 +258,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Questions");
+                    b.ToTable("Question", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.QuestionTag", b =>
@@ -281,7 +281,7 @@ namespace SciQuery.Infrastructure.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("QuestionTags");
+                    b.ToTable("QuestionTag", (string)null);
                 });
 
             modelBuilder.Entity("SciQuery.Domain.Entities.ReputationChange", b =>

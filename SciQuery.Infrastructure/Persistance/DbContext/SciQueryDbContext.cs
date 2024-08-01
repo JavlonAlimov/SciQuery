@@ -66,6 +66,10 @@ public class SciQueryDbContext(DbContextOptions<SciQueryDbContext> options,
         builder.Entity<Tag>().ToTable(nameof(Tag));
         
         builder.Entity<Vote>().ToTable(nameof(Vote));
+
+        builder.Entity<Question>().ToTable(nameof(Question));
+
+        builder.Entity<QuestionTag>().ToTable(nameof(QuestionTag));
         
         builder.Entity<ReputationChange>().ToTable(nameof(ReputationChange));
         

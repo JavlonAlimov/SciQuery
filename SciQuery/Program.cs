@@ -1,3 +1,4 @@
+using Bogus;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
@@ -137,6 +138,11 @@ internal class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<SciQueryDbContext>();
+
+            DatabaseSeeder.SeedData(context);
         }
 
         // Check if the roles exist, if not, create them
@@ -173,6 +179,6 @@ internal class Program
 
         app.MapControllers();
 
-        app.Run();
+            app.Run();
     }
 }
