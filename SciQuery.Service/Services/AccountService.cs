@@ -32,6 +32,7 @@ public class AccountService(UserManager<User> userManager,IConfiguration configu
         {
             UserName = model.UserName,
             Email = model.Email,
+            CreatedDate = DateTime.Now,
             SecurityStamp = Guid.NewGuid().ToString(),
         };
 
@@ -62,8 +63,12 @@ public class AccountService(UserManager<User> userManager,IConfiguration configu
         {
             throw new AuthenticationException($"Incorrect Password!");
         }
-
+        
+        user.LastLogindate = DateTime.Now;
+        await _userManager.UpdateAsync(user);
+        
         var token = await GenerateToken(user, model.UserName);
+        
         return token ?? "";
 
     }

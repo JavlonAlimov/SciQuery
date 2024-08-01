@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SciQuery.Domain.Exceptions;
 using SciQuery.Domain.UserModels;
 using SciQuery.Service.DTOs.Question;
 using SciQuery.Service.Interfaces;
@@ -10,10 +11,9 @@ namespace SciQuery.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class QuestionsController(IQuestionService questionService, UserManager<User> userManager) : ControllerBase
+    public class QuestionsController(IQuestionService questionService) : ControllerBase
     {
         private readonly IQuestionService _questionService = questionService;
-        private readonly UserManager<User> _userManager = userManager;
 
         [HttpGet]
         public async Task<IActionResult> GetAllQuestions()
@@ -25,7 +25,6 @@ namespace SciQuery.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetQuestionById(int id)
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             var question = await _questionService.GetByIdAsync(id);
             if (question == null)
             {
@@ -37,13 +36,16 @@ namespace SciQuery.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateQuestion([FromBody] QuestionForCreateDto questionDto)
         {
+            questionDto.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) 
+                ?? throw new EntityNotFoundException("User does not found!");
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
             
             var createdQuestion = await _questionService.CreateAsync(questionDto);
-            return CreatedAtAction(nameof(GetQuestionById), new { id = createdQuestion.Id}, createdQuestion);
+            return Created(nameof(GetQuestionById),new { createdQuestion });
         }
 
         [HttpPut("{id}")]

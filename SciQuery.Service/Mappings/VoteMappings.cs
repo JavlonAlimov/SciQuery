@@ -8,7 +8,7 @@ public class VoteMappings : Profile
 {
     public VoteMappings()
     {
-        CreateMap<Vote, VoteDto>().ReverseMap();
+        CreateMap<Vote, VoteDto>();
         CreateMap<VoteForCreateDto,Vote>();
     }
 }
