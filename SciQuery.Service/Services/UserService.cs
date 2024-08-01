@@ -8,6 +8,7 @@ using SciQuery.Service.DTOs.User;
 using SciQuery.Service.Interfaces;
 using SciQuery.Service.Mappings;
 using SciQuery.Service.Mappings.Extensions;
+using SciQuery.Service.Pagination.PaginatedList;
 
 namespace SciQuery.Service.Services;
 
@@ -15,7 +16,7 @@ public class UserService(UserManager<User> user,IMapper mapper) : IUserService
 {
     private readonly UserManager<User> _userManager = user ?? throw new ArgumentNullException(nameof(user));
     private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-    public async Task<IEnumerable<UserDto>> GetAllAsync()
+    public async Task<PaginatedList<UserDto>> GetAllAsync()
     {
         var users = await _userManager.Users
             .AsNoTracking()
@@ -45,7 +46,7 @@ public class UserService(UserManager<User> user,IMapper mapper) : IUserService
 
         return _mapper.Map<UserDto>(user);
     }
-    public async Task<UserDto> UpdateAsync(int id, UserForUpdatesDto userUpdateDto)
+    public async Task UpdateAsync(int id, UserForUpdatesDto userUpdateDto)
     {
         var user = await _userManager.FindByIdAsync(id.ToString())
             ?? throw new EntityNotFoundException($"User with id : {id} is not found!");
@@ -58,7 +59,6 @@ public class UserService(UserManager<User> user,IMapper mapper) : IUserService
         {
             throw new InvalidOperationException($"Something wrong with updating user with id : {id}");
         }
-        return _mapper.Map<UserDto>(user);
     }   
     public async Task<bool> DeleteAsync(int id)
     {
