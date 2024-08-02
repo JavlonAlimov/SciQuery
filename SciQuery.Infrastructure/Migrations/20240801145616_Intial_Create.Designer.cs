@@ -12,8 +12,8 @@ using SciQuery.Infrastructure.Persistance.DbContext;
 namespace SciQuery.Infrastructure.Migrations
 {
     [DbContext(typeof(SciQueryDbContext))]
-    [Migration("20240801122115_NameOf Table question and questiontag")]
-    partial class NameOfTablequestionandquestiontag
+    [Migration("20240801145616_Intial_Create")]
+    partial class Intial_Create
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
