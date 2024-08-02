@@ -7,5 +7,5 @@ public class TagDto
 {
     public int Id { get; set; }
     public string Name { get; set; }
-    public ICollection<QuestionTag> QuestionTags { get; set; }
+    public ICollection<int>? Questions { get; set; }
 }

@@ -3,7 +3,9 @@ using Microsoft.EntityFrameworkCore;
 using SciQuery.Domain.Entities;
 using SciQuery.Domain.Exceptions;
 using SciQuery.Infrastructure.Persistance.DbContext;
+using SciQuery.Service.DTOs.QueryParams;
 using SciQuery.Service.DTOs.Question;
+using SciQuery.Service.DTOs.Tag;
 using SciQuery.Service.Interfaces;
 using SciQuery.Service.Mappings.Extensions;
 using SciQuery.Service.Pagination.PaginatedList;
@@ -15,6 +17,33 @@ public class QuestionService(SciQueryDbContext dbContext,IMapper mapper) : IQues
     private readonly SciQueryDbContext _context = dbContext;
     private readonly IMapper _mapper = mapper;
 
+    public async Task<PaginatedList<QuestionDto>> GetQuestionsByTags(QuestionQueryParams queryParams)
+    {
+        if(queryParams.Tags == null || queryParams.Tags.Count == 0)
+        {
+            throw new Exception();
+        }
+
+        var result = _context.Tags
+            .Where(x => queryParams.Tags.Contains(x.Name))
+            .Join(_context.QuestionTags,
+                t => t.Id,
+                qt => qt.TagId,
+                (t, qt) => new { qt.QuestionId })
+            .GroupBy(q => q.QuestionId)
+            .OrderByDescending(g => g.Count())
+            .Select(g => new { QuestionId = g.Key, Count = g.Count() });
+
+        var questions = await result
+            .Join(_context.Questions,
+                  r => r.QuestionId,
+                  q => q.Id,
+                  (r, q) => q)
+            .AsNoTracking()
+            .ToPaginatedList<QuestionDto,Question>(_mapper.ConfigurationProvider,1,15);
+
+        return questions;
+    }
     public async Task<PaginatedList<QuestionDto>> GetAllAsync()
     {
         var questions = await _context.Questions
