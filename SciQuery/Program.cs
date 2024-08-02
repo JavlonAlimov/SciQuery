@@ -6,15 +6,25 @@ using Microsoft.OpenApi.Models;
 using SciQuery.Domain.UserModels;
 using SciQuery.Domain.UserModels.AppRoles;
 using SciQuery.Infrastructure.Persistance.DbContext;
+using SciQuery.Middlewares;
 using SciQuery.Service.Interfaces;
 using SciQuery.Service.Mappings;
 using SciQuery.Service.Services;
+using Serilog;
 using System.Text;
 
 internal class Program
 {
     private static async Task Main(string[] args)
     {
+        Log.Logger = new LoggerConfiguration()
+        .MinimumLevel.Debug()
+        .WriteTo.Console()
+        .WriteTo.File("logs/logs_.txt", rollingInterval: RollingInterval.Day)
+        .WriteTo.File("logs/error_.txt", Serilog.Events.LogEventLevel.Error, rollingInterval: RollingInterval.Day)
+        .WriteTo.File("logs/error_.txt", Serilog.Events.LogEventLevel.Fatal, rollingInterval: RollingInterval.Day)
+        .CreateLogger();
+
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
@@ -170,6 +180,8 @@ internal class Program
                 await roleManager.CreateAsync(new IdentityRole(AppRoles.Master));
             }
         }
+
+        app.UseMiddleware<ExceptionHandler>();
 
         app.UseHttpsRedirection();
         

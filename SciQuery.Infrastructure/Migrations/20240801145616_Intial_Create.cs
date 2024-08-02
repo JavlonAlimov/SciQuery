@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace SciQuery.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class updateanswer_table : Migration
+    public partial class Intial_Create : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -174,7 +174,7 @@ namespace SciQuery.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Questions",
+                name: "Question",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -188,9 +188,9 @@ namespace SciQuery.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Questions", x => x.Id);
+                    table.PrimaryKey("PK_Question", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Questions_AspNetUsers_UserId",
+                        name: "FK_Question_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -242,15 +242,15 @@ namespace SciQuery.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
-                        name: "FK_Answer_Questions_QuestionId",
+                        name: "FK_Answer_Question_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Questions",
+                        principalTable: "Question",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "QuestionTags",
+                name: "QuestionTag",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -260,15 +260,15 @@ namespace SciQuery.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_QuestionTags", x => x.Id);
+                    table.PrimaryKey("PK_QuestionTag", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_QuestionTags_Questions_QuestionId",
+                        name: "FK_QuestionTag_Question_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Questions",
+                        principalTable: "Question",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_QuestionTags_Tag_TagId",
+                        name: "FK_QuestionTag_Tag_TagId",
                         column: x => x.TagId,
                         principalTable: "Tag",
                         principalColumn: "Id",
@@ -302,9 +302,9 @@ namespace SciQuery.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Comment_Questions_QuestionId",
+                        name: "FK_Comment_Question_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Questions",
+                        principalTable: "Question",
                         principalColumn: "Id");
                 });
 
@@ -334,9 +334,9 @@ namespace SciQuery.Infrastructure.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Vote_Questions_QuestionId",
+                        name: "FK_Vote_Question_QuestionId",
                         column: x => x.QuestionId,
-                        principalTable: "Questions",
+                        principalTable: "Question",
                         principalColumn: "Id");
                 });
 
@@ -405,18 +405,18 @@ namespace SciQuery.Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Questions_UserId",
-                table: "Questions",
+                name: "IX_Question_UserId",
+                table: "Question",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionTags_QuestionId",
-                table: "QuestionTags",
+                name: "IX_QuestionTag_QuestionId",
+                table: "QuestionTag",
                 column: "QuestionId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_QuestionTags_TagId",
-                table: "QuestionTags",
+                name: "IX_QuestionTag_TagId",
+                table: "QuestionTag",
                 column: "TagId");
 
             migrationBuilder.CreateIndex(
@@ -462,7 +462,7 @@ namespace SciQuery.Infrastructure.Migrations
                 name: "Comment");
 
             migrationBuilder.DropTable(
-                name: "QuestionTags");
+                name: "QuestionTag");
 
             migrationBuilder.DropTable(
                 name: "ReputationChange");
@@ -480,7 +480,7 @@ namespace SciQuery.Infrastructure.Migrations
                 name: "Answer");
 
             migrationBuilder.DropTable(
-                name: "Questions");
+                name: "Question");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
