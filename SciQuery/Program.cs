@@ -130,7 +130,7 @@ internal class Program
             options.AddPolicy("RequireUserAndMasterRole", policy => policy.RequireRole(AppRoles.Administrator, AppRoles.User));
         });
 
-        //To Allowed to client
+        //To Allowed to client React. Without this code Api does not response to fronted.
         builder.Services.AddCors(options =>
         {
             options.AddPolicy("AllowLocalhost5173",
@@ -182,8 +182,9 @@ internal class Program
 
         app.UseHttpsRedirection();
 
+        //For api response to fronted react
         app.UseRouting();
-
+        //and this
         app.UseCors("AllowLocalhost5173");
 
         app.UseAuthentication();
