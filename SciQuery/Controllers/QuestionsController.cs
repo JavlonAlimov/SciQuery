@@ -1,20 +1,32 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SciQuery.Domain.Entities;
 using SciQuery.Domain.Exceptions;
 using SciQuery.Domain.UserModels;
+using SciQuery.Service.DTOs.QueryParams;
 using SciQuery.Service.DTOs.Question;
+using SciQuery.Service.DTOs.Tag;
 using SciQuery.Service.Interfaces;
+using SciQuery.Service.Pagination.PaginatedList;
 using System.Security.Claims;
 
 namespace SciQuery.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowLocalhost5173")]
     public class QuestionsController(IQuestionService questionService) : ControllerBase
     {
         private readonly IQuestionService _questionService = questionService;
 
+        [HttpGet("get-with-tags")]
+        public async Task<ActionResult> GetQuestionsByTags([FromBody] QuestionQueryParams queryParams)
+        {
+            var result = await _questionService.GetQuestionsByTags(queryParams);
+            return Ok(result);
+        }
         [HttpGet]
         public async Task<IActionResult> GetAllQuestions()
         {
