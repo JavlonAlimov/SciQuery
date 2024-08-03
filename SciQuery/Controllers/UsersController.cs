@@ -12,7 +12,7 @@ namespace SciQuery.Controllers
         private readonly IUserService _userService = userService;
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserById(int id)
+        public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userService.GetByIdAsync(id);
             if (user == null)
@@ -43,7 +43,7 @@ namespace SciQuery.Controllers
                 return BadRequest("User could not be created.");
             }
 
-            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
+            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.UserId }, createdUser);
         }
 
         [HttpPut("{id}")]
