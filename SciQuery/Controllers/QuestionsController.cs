@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SciQuery.Domain.Entities;
@@ -15,6 +16,7 @@ namespace SciQuery.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [EnableCors("AllowLocalhost5173")]
     public class QuestionsController(IQuestionService questionService) : ControllerBase
     {
         private readonly IQuestionService _questionService = questionService;

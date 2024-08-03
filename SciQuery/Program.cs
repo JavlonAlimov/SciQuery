@@ -130,6 +130,15 @@ internal class Program
             options.AddPolicy("RequireUserAndMasterRole", policy => policy.RequireRole(AppRoles.Administrator, AppRoles.User));
         });
 
+        //To Allowed to client
+        builder.Services.AddCors(options =>
+        {
+            options.AddPolicy("AllowLocalhost5173",
+                builder => builder
+                    .WithOrigins("http://localhost:5173")
+                    .AllowAnyHeader()
+                    .AllowAnyMethod());
+        });
 
         var app = builder.Build();
 
@@ -172,7 +181,11 @@ internal class Program
         }
 
         app.UseHttpsRedirection();
-        
+
+        app.UseRouting();
+
+        app.UseCors("AllowLocalhost5173");
+
         app.UseAuthentication();
 
         app.UseAuthorization();
