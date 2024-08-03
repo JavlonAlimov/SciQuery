@@ -23,6 +23,7 @@ internal class Program
 
         //Add Services
         builder.Services.AddScoped<IAccountService,AccountService>();
+        builder.Services.AddScoped<IUserService,UserService>();
         builder.Services.AddScoped<ITagService, TagService>();
         builder.Services.AddScoped<IQuestionService, QuestionService>();
         builder.Services.AddScoped<IAnswerService, AnswerService>();
