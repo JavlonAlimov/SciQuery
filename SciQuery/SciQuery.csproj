@@ -25,4 +25,8 @@
     <ProjectReference Include="..\SciQuery.Service\SciQuery.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Source\Images\UserImages\QuestionImages\" />
+  </ItemGroup>
+
 </Project>
