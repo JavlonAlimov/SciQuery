@@ -6,6 +6,7 @@ using Microsoft.OpenApi.Models;
 using SciQuery.Domain.UserModels;
 using SciQuery.Domain.UserModels.AppRoles;
 using SciQuery.Infrastructure.Persistance.DbContext;
+using SciQuery.Middlewares;
 using SciQuery.Service.Interfaces;
 using SciQuery.Service.Mappings;
 using SciQuery.Service.Services;
@@ -76,6 +77,7 @@ builder.Services.AddAuthentication(options =>
 })
     .AddJwtBearer(options =>
     {
+
         var secret = builder.Configuration["JwtConfig:SecretKey"];
         var issuer = builder.Configuration["JwtConfig:ValidIssuer"];
         var audience = builder.Configuration["JwtConfig:ValidAudiences"];
@@ -94,8 +96,6 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret))
         };
     });
-
-
 
 //Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -191,6 +191,8 @@ using (var serviceScope = app.Services.CreateScope())
 
 app.UseHttpsRedirection();
 
+app.UseMiddleware<ExceptionHandler>();
+       
 //For api response to fronted react
 app.UseRouting();
 //and this
