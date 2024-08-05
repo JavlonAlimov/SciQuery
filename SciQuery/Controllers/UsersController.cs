@@ -43,7 +43,7 @@ namespace SciQuery.Controllers
                 return BadRequest("User could not be created.");
             }
 
-            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.UserId }, createdUser);
+            return CreatedAtAction(nameof(GetUserById), new { id = createdUser.Id }, createdUser);
         }
 
         [HttpPut("{id}")]
