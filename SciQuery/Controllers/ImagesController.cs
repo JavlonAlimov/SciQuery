@@ -8,7 +8,6 @@ namespace SciQuery.Controllers
     [ApiController]
     public class ImagesController : ControllerBase
     {
-
         // GET: api/<ValuesController>
         [HttpGet]
         public IEnumerable<string> Get()
@@ -17,10 +16,10 @@ namespace SciQuery.Controllers
         }
 
         // GET api/<ValuesController>/5
-        [HttpGet("{id}", Name = "GetByUserId")]
-        public async Task<IFormFile> Get(int id)
+        [HttpGet("{id}")]
+        public string Get(int id)
         {
-            
+            return "value";
         }
 
         // POST api/<ValuesController>
