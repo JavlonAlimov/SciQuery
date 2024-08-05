@@ -20,7 +20,7 @@ namespace SciQuery.Controllers
         [HttpGet("{id}", Name = "GetByUserId")]
         public async Task<IFormFile> Get(int id)
         {
-            
+            return await Get(id);
         }
 
         // POST api/<ValuesController>
