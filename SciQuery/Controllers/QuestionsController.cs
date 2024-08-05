@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc;
 using SciQuery.Domain.Entities;
 using SciQuery.Domain.Exceptions;
 using SciQuery.Domain.UserModels;
-using SciQuery.Service.DTOs.QueryParams;
 using SciQuery.Service.DTOs.Question;
 using SciQuery.Service.DTOs.Tag;
 using SciQuery.Service.Interfaces;
 using SciQuery.Service.Pagination.PaginatedList;
+using SciQuery.Service.QueryParams;
 using System.Security.Claims;
 
 namespace SciQuery.Controllers
@@ -22,15 +22,15 @@ namespace SciQuery.Controllers
         private readonly IQuestionService _questionService = questionService;
 
         [HttpGet("get-with-tags")]
-        public async Task<ActionResult> GetQuestionsByTags([FromBody] QuestionQueryParams queryParams)
+        public async Task<ActionResult> GetQuestionsByTags([FromBody] QuestionQueryParameters queryParams)
         {
             var result = await _questionService.GetQuestionsByTags(queryParams);
             return Ok(result);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllQuestions()
+        public async Task<IActionResult> GetAllQuestions([FromQuery] QuestionQueryParameters queryParameters)
         {
-            var questions = await _questionService.GetAllAsync();
+            var questions = await _questionService.GetAllAsync(queryParameters);
             return Ok(questions);
         }
 
