@@ -44,7 +44,7 @@ public class FileMangingService(FileExtensionContentTypeProvider fileExtension) 
                 "Files",
                 fileName);
         }*/
-        path = Path.Combine(path,"source","userImages",fileName);
+        path = Path.Combine(path,"source","Images","userImages",fileName);
 
         using (var stream = new FileStream(path, FileMode.Create))
         {
