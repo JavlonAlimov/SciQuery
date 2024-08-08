@@ -111,36 +111,85 @@ public class QuestionService(SciQueryDbContext dbContext,IMapper mapper, IFileMa
             ?? throw new EntityNotFoundException($"Question with id : {id} is not found!");
     }
 
+    //public async Task<QuestionDto> CreateAsync(QuestionForCreateDto questionCreateDto)
+    //{
+    //    var question = _mapper.Map<Question>(questionCreateDto);
+    //    question.CreatedDate = DateTime.Now;
+    //    question.UpdatedDate = DateTime.Now;
+
+    //    var created = _context.Questions.Add(question).Entity;
+    //    await _context.SaveChangesAsync();
+
+    //    foreach (var tagName in questionCreateDto.Tags)
+    //    {
+    //        var tag = await _context.Tags.SingleOrDefaultAsync(t => t.Name == tagName);
+
+    //        if (tag == null)
+    //        {
+    //            tag = new Tag { Name = tagName };
+    //            _context.Tags.Add(tag);
+    //            await _context.SaveChangesAsync();
+    //        }
+
+    //        var questionTag = new QuestionTag
+    //        {
+    //            QuestionId = question.Id,
+    //            TagId = tag.Id
+    //        };
+
+    //        _context.QuestionTags.Add(questionTag);
+    //    }
+
+    //    return _mapper.Map<QuestionDto>(created);
+    //}
+
     public async Task<QuestionDto> CreateAsync(QuestionForCreateDto questionCreateDto)
     {
+        // Question ob'ektini yaratish va xaritalash
         var question = _mapper.Map<Question>(questionCreateDto);
         question.CreatedDate = DateTime.Now;
         question.UpdatedDate = DateTime.Now;
 
-        var created = _context.Questions.Add(question).Entity;
+        // Question ob'ektini saqlash
+        _context.Questions.Add(question);
         await _context.SaveChangesAsync();
 
+        // Teglar va ularning bog'lanishlarini qo'shish
+        var tags = new List<Tag>();
         foreach (var tagName in questionCreateDto.Tags)
         {
             var tag = await _context.Tags.SingleOrDefaultAsync(t => t.Name == tagName);
-            
+
             if (tag == null)
             {
                 tag = new Tag { Name = tagName };
-                _context.Tags.Add(tag);
-                await _context.SaveChangesAsync();
+                tags.Add(tag);
             }
-
-            var questionTag = new QuestionTag
+            else
             {
-                QuestionId = question.Id,
-                TagId = tag.Id
-            };
-
-            _context.QuestionTags.Add(questionTag);
+                tags.Add(tag);
+            }
         }
 
-        return _mapper.Map<QuestionDto>(created);
+        // Teglarni birgalikda qo'shish
+        if (tags.Any(t => t.Id == 0)) // Yangi taglar mavjud bo'lsa
+        {
+            _context.Tags.AddRange(tags.Where(t => t.Id == 0));
+            await _context.SaveChangesAsync();
+        }
+
+        // QuestionTag bog'lanishlarini yaratish
+        var questionTags = tags.Select(t => new QuestionTag
+        {
+            QuestionId = question.Id,
+            TagId = t.Id
+        }).ToList();
+
+        _context.QuestionTags.AddRange(questionTags);
+        await _context.SaveChangesAsync();
+
+        // Yangi yaratilgan QuestionDto qaytarish
+        return _mapper.Map<QuestionDto>(question);
     }
 
     public async Task<List<string>> CreateImages(List<IFormFile> files)

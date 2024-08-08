@@ -8,7 +8,10 @@ public interface IUserService
     Task<PaginatedList<UserDto>> GetAllAsync();
     Task<UserDto> GetByIdAsync(string id);
     Task<UserDto> CreateAsync(UserForCreateDto userCreateDto);
+
     Task<string> CreateImage(IFormFile file);
-    Task UpdateAsync(int id, UserForUpdatesDto userUpdateDto);
-    Task<bool> DeleteAsync(int id);
+   
+    Task UpdateAsync(string id, UserForUpdatesDto userUpdateDto);
+    Task<bool> DeleteAsync(string id);
+
 }

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -6,7 +6,6 @@ using SciQuery.Domain.Entities;
 using SciQuery.Domain.Exceptions;
 using SciQuery.Domain.UserModels;
 using SciQuery.Service.DTOs.Question;
-using SciQuery.Service.DTOs.Tag;
 using SciQuery.Service.Interfaces;
 using SciQuery.Service.Pagination.PaginatedList;
 using SciQuery.Service.QueryParams;
@@ -20,26 +19,31 @@ namespace SciQuery.Controllers;
 [EnableCors("AllowLocalhost5173")]
 public class QuestionsController(IQuestionService questionService) : ControllerBase
 {
-    private readonly IQuestionService _questionService = questionService;
 
-    [HttpGet("get-with-tags")]
-    public async Task<ActionResult> GetQuestionsByTags([FromBody] QuestionQueryParameters queryParams)
+    [Route("api/[controller]")]
+    [ApiController]
+    [EnableCors("AllowLocalhost5173")]
+    public class QuestionsController : ControllerBase
     {
-        var result = await _questionService.GetQuestionsByTags(queryParams);
-        return Ok(result);
-    }
-    [HttpGet]
-    public async Task<IActionResult> GetAllQuestions([FromQuery] QuestionQueryParameters queryParameters)
-    {
-        var questions = await _questionService.GetAllAsync(queryParameters);
-        return Ok(questions);
-    }
+        private readonly IQuestionService _questionService;
+        private readonly UserManager<User> _userManager;
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetQuestionById(int id)
-    {
-        var question = await _questionService.GetByIdAsync(id);
-        if (question == null)
+        public QuestionsController(IQuestionService questionService, UserManager<User> userManager)
+        {
+            _questionService = questionService;
+            _userManager = userManager;
+        }
+
+        [HttpGet("get-with-tags")]
+        public async Task<ActionResult> GetQuestionsByTags([FromBody] QuestionQueryParameters queryParams)
+        {
+            var result = await _questionService.GetQuestionsByTags(queryParams);
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllQuestions([FromQuery] QuestionQueryParameters queryParameters)
+
         {
             return NotFound();
         }
@@ -52,14 +56,47 @@ public class QuestionsController(IQuestionService questionService) : ControllerB
         questionDto.UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) 
             ?? throw new EntityNotFoundException("User does not found!");
 
-        if (!ModelState.IsValid)
+
+        [HttpPost]
+        public async Task<IActionResult> CreateQuestion([FromBody] QuestionForCreateDto question)
         {
-            return BadRequest(ModelState);
+            // Foydalanuvchini topish
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new EntityNotFoundException("User does not found!");
+            }
+
+            question.UserId = user.Id;
+
+            // ModelState ni tekshirish
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            try
+            {
+                // Savol yaratish jarayoni
+                var createdQuestion = await _questionService.CreateAsync(question);
+
+                // Yaratilgan savolni qaytarish
+                return CreatedAtAction(nameof(GetQuestionById),
+                       new { id = createdQuestion.Id },
+                       createdQuestion);
+            }
+            catch (Exception ex)
+            {
+                // Har qanday boshqa xatolar uchun umumiy xatolik javobini qaytarish
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+
         }
         
         var createdQuestion = await _questionService.CreateAsync(questionDto);
         return Created(nameof(GetQuestionById),new { createdQuestion });
     }
+
 
     [HttpPost("UploadImages")]
     public async Task<ActionResult> UploadFile(List<IFormFile> files)

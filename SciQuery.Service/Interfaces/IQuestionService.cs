@@ -12,8 +12,10 @@ public interface IQuestionService
     Task<PaginatedList<ForEasyQestionDto>> GetQuestionsByTags(QuestionQueryParameters queryParams);
     Task<PaginatedList<ForEasyQestionDto>> GetAllAsync(QuestionQueryParameters queryParams);
     Task<QuestionDto> GetByIdAsync(int id);
+
     Task<QuestionDto> CreateAsync(QuestionForCreateDto question);
     Task<List<string>> CreateImages(List<IFormFile> files);
+
     Task UpdateAsync(int id,QuestionForUpdateDto question);
     Task DeleteAsync(int id);
 }
