@@ -82,6 +82,6 @@ public class UserService(UserManager<User> user,IMapper mapper, IFileManagingSer
 
     public async Task<string> CreateImage(IFormFile file)
     {
-        return await _fileManaging.UploadFileAsync(file);
+        return await _fileManaging.UploadUserImagesAsync(file);
     }
 }
